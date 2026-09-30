@@ -4,116 +4,246 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文心觀照 - 線上留言板</title>
+
+  <!-- 手機加入桌面 App 圖示設定 -->
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy_ID&sz=w512">
+  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy_ID&sz=w512">
+
   <style>
     :root {
-      --primary-color: #5c6b73;
-      --accent-color: #9db4c0;
-      --bg-color: #f7f9fb;
-      --card-bg: #ffffff;
-      --text-main: #2b2d42;
+      /* 暖色系配置 */
+      --bg-color: #faf7f2;          /* 暖米杏底色 */
+      --card-bg: #ffffff;           /* 純白卡片 */
+      --primary-color: #8c5e3c;     /* 暖木褐 / 焦糖木質 */
+      --primary-hover: #734a2e;
+      --accent-color: #c97a56;      /* 暖陶紅 / 陶土橙 */
+      --accent-light: #fbeee6;      /* 陶土淡底色 */
+      --guide-bg: #f5efe6;          /* 指南針淡杏色 */
+      --text-main: #3d312a;         /* 深暖灰褐字 */
+      --text-muted: #7d7067;        /* 次要文字灰褐色 */
+      --border-color: #e5ded5;      /* 溫和分隔線 */
     }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
-      padding: 20px;
+      padding: 24px 16px;
       display: flex;
       justify-content: center;
+      line-height: 1.6;
     }
+
     .container {
       width: 100%;
-      max-width: 680px;
+      max-width: 820px;
     }
+
+    /* 頂部標題 */
     header {
       text-align: center;
       margin-bottom: 24px;
     }
     h1 {
-      margin: 0 0 8px 0;
-      letter-spacing: 2px;
+      font-size: 46px;
+      margin: 0 0 16px 0;
       color: var(--primary-color);
+      letter-spacing: 3px;
     }
-    .topic-banner {
-      background: #e0e7ec;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-weight: 500;
-      margin-top: 12px;
+
+    /* 分頁切換列 */
+    .tab-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
     }
-    .form-card, .msg-card {
+    .tab-btn {
+      flex: 1;
+      padding: 16px 12px;
+      font-size: 32px;
+      font-weight: 700;
+      border: 3px solid var(--primary-color);
+      border-radius: 12px;
+      background: #ffffff;
+      color: var(--primary-color);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      background: var(--primary-color);
+      color: #ffffff;
+    }
+
+    /* 資訊導讀卡片 (本月主題、說明、指南針) */
+    .intro-card {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      margin-bottom: 20px;
+      border-left: 10px solid var(--accent-color);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.08);
+      margin-bottom: 24px;
+    }
+    .topic-badge {
+      display: inline-block;
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--accent-color);
+      padding: 6px 20px;
+      border-radius: 30px;
+      margin-bottom: 14px;
+    }
+    .intro-topic-title {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .intro-desc {
+      font-size: 32px;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      white-space: pre-wrap;
+    }
+    .intro-guide {
+      background: var(--guide-bg);
+      border: 2px dashed var(--accent-color);
+      border-radius: 12px;
+      padding: 18px 20px;
+      font-size: 32px;
+      color: #4a3b32;
+      white-space: pre-wrap;
+    }
+    .guide-title {
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: 34px;
+    }
+
+    /* 表單區塊 */
+    .form-card {
+      background: var(--card-bg);
+      padding: 28px 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.08);
+      margin-bottom: 30px;
     }
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 22px;
     }
     label {
       display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-color);
     }
     input[type="text"], textarea {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #dcdcdc;
-      border-radius: 6px;
+      padding: 16px 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
       box-sizing: border-box;
-      font-size: 15px;
+      font-size: 32px;
+      color: var(--text-main);
+      background: #ffffff;
+      outline: none;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--accent-color);
     }
     input[readonly] {
-      background-color: #f1f3f5;
-      color: #6c757d;
+      background-color: #f7f3ee;
+      color: var(--text-muted);
+      cursor: not-allowed;
     }
     textarea {
       resize: vertical;
-      min-height: 100px;
+      min-height: 180px;
     }
-    button {
+
+    /* 按鈕樣式 */
+    .action-btn {
       background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 12px 24px;
-      font-size: 15px;
-      border-radius: 6px;
+      padding: 18px 24px;
+      font-size: 34px;
+      font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
       width: 100%;
-      transition: opacity 0.2s;
+      transition: background 0.2s;
     }
-    button:disabled {
+    .action-btn:hover {
+      background-color: var(--primary-hover);
+    }
+    .action-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    /* 心得牆區塊 */
+    .wall-header-btn {
+      background-color: #e8dcd0;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+      padding: 16px;
+      font-size: 32px;
+      font-weight: 700;
+      border-radius: 12px;
+      width: 100%;
+      cursor: pointer;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .msg-card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.06);
+      margin-bottom: 22px;
+      border-left: 8px solid var(--primary-color);
     }
     .msg-header {
       display: flex;
       justify-content: space-between;
-      font-size: 14px;
-      color: #7b8794;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #f0f0f0;
-      padding-bottom: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 32px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
     }
     .msg-author {
-      font-weight: 600;
+      font-weight: 800;
       color: var(--primary-color);
     }
-    .msg-topic {
+    .msg-topic-tag {
       display: inline-block;
-      background: #edf2f4;
-      color: #4a5568;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      margin-bottom: 8px;
+      background: var(--accent-light);
+      color: var(--accent-color);
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 32px;
+      margin-bottom: 14px;
     }
     .msg-body {
       white-space: pre-wrap;
-      line-height: 1.6;
-      font-size: 15px;
+      font-size: 32px;
+      color: var(--text-main);
+    }
+    .status-hint {
+      text-align: center;
+      font-size: 32px;
+      color: var(--text-muted);
+      padding: 40px 0;
     }
   </style>
 </head>
@@ -122,89 +252,145 @@
 <div class="container">
   <header>
     <h1>文心觀照</h1>
-    <div class="topic-banner" id="bannerTopic">載入本月主題中...</div>
   </header>
 
-  <!-- 填寫表單 -->
-  <div class="form-card">
-    <form id="commentForm">
-      <div class="form-group">
-        <label for="name">姓名</label>
-        <input type="text" id="name" required placeholder="請填寫您的姓名">
-      </div>
-      <div class="form-group">
-        <label for="dharmaName">法名</label>
-        <input type="text" id="dharmaName" placeholder="請填寫您的法名">
-      </div>
-      <div class="form-group">
-        <label for="topic">本月主題</label>
-        <input type="text" id="topic" readonly value="載入中...">
-      </div>
-      <div class="form-group">
-        <label for="content">觀行心得</label>
-        <textarea id="content" required placeholder="寫下您這個月份的觀行、學習或實踐心得..."></textarea>
-      </div>
-      <button type="submit" id="submitBtn">送出觀照心得</button>
-    </form>
+  <!-- 頁籤導覽列 (分頁切換) -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabWriteBtn" onclick="switchView('write')">✍️ 填寫心得</button>
+    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">🌸 心光匯萃 </button>
   </div>
 
-  <!-- 留言展示列表 -->
-  <div id="messagesList">
-    <p style="text-align: center; color: #888;">正在載入留言...</p>
+  <!-- 本月主題導讀卡片 -->
+  <div class="intro-card">
+    <div class="topic-badge">本月主題</div>
+    <div class="intro-topic-title" id="displayTopic">載入主題中...</div>
+    <div class="intro-desc" id="displayDesc"></div>
+    <div class="intro-guide" id="guideBox" style="display: none;">
+      <div class="guide-title">🧭 觀行指南針</div>
+      <div id="displayGuide"></div>
+    </div>
+  </div>
+
+  <!-- 【分頁一：留言填寫區】 -->
+  <div id="writeSection">
+    <div class="form-card">
+      <form id="commentForm">
+        <div class="form-group">
+          <label for="name">姓名</label>
+          <input type="text" id="name" required placeholder="請填寫您的姓名">
+        </div>
+        <div class="form-group">
+          <label for="dharmaName">法名</label>
+          <input type="text" id="dharmaName" placeholder="請填寫您的法名">
+        </div>
+        <div class="form-group">
+          <label for="topic">本月主題</label>
+          <input type="text" id="topic" readonly value="載入中...">
+        </div>
+        <div class="form-group">
+          <label for="content">觀行心得</label>
+          <textarea id="content" required placeholder="請依本月主題與觀行指南針，寫下您的日常觀照心得......"></textarea>
+        </div>
+        <button type="submit" class="action-btn" id="submitBtn">送出觀照心得</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 【分頁二：心得牆展示區】 -->
+  <div id="wallSection" style="display: none;">
+    <button class="wall-header-btn" onclick="switchView('write')">⬅️ 返回填寫心得留言</button>
+    <div id="wallMessagesList">
+      <div class="status-hint">正在載入本月心得...</div>
+    </div>
   </div>
 </div>
 
 <script>
-  // 請置換為您的 Apps Script 網頁應用程式 URL
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
+  // 請填入您的 Apps Script 網頁應用程式 URL
+  const GAS_URL = "YOUR_GAS_API_URL_HERE";
 
-  let currentMonthlyTopic = "";
+  let currentTopicName = "";
+  let allMessages = [];
 
-  // 載入資料 (主題與既有留言)
+  // 切換分頁邏輯
+  function switchView(viewName) {
+    const writeSection = document.getElementById("writeSection");
+    const wallSection = document.getElementById("wallSection");
+    const tabWriteBtn = document.getElementById("tabWriteBtn");
+    const tabWallBtn = document.getElementById("tabWallBtn");
+
+    if (viewName === 'write') {
+      writeSection.style.display = "block";
+      wallSection.style.display = "none";
+      tabWriteBtn.classList.add("active");
+      tabWallBtn.classList.remove("active");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      writeSection.style.display = "none";
+      wallSection.style.display = "block";
+      tabWriteBtn.classList.remove("active");
+      tabWallBtn.classList.add("active");
+      renderMonthlyWall();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // 載入資料 (主題、說明、指南針、全部心得)
   async function loadData() {
     try {
       const response = await fetch(GAS_URL);
       const data = await response.json();
 
-      currentMonthlyTopic = data.topic;
-      document.getElementById("bannerTopic").innerText = `本月主題：${data.topic}`;
-      document.getElementById("topic").value = data.topic;
+      currentTopicName = (data.topic || "").trim();
+      document.getElementById("displayTopic").innerText = currentTopicName;
+      document.getElementById("topic").value = currentTopicName;
 
-      renderMessages(data.messages);
+      if (data.description) {
+        document.getElementById("displayDesc").innerText = data.description;
+      }
+      if (data.guide) {
+        document.getElementById("guideBox").style.display = "block";
+        document.getElementById("displayGuide").innerText = data.guide;
+      }
+
+      allMessages = data.messages || [];
     } catch (err) {
-      document.getElementById("bannerTopic").innerText = "無法載入主題，請稍候再試";
+      document.getElementById("displayTopic").innerText = "無法載入主題，請稍候重整";
       console.error(err);
     }
   }
 
-  // 渲染留言清單
-  function renderMessages(messages) {
-    const container = document.getElementById("messagesList");
-    if (!messages || messages.length === 0) {
-      container.innerHTML = '<p style="text-align: center; color: #888;">目前尚無心得分享，歡迎搶先留言！</p>';
+  // 渲染心得牆 (只挑出符合當月主題的留言)
+  function renderMonthlyWall() {
+    const container = document.getElementById("wallMessagesList");
+    
+    // 過濾出屬於當月主題的心得
+    const monthlyList = allMessages.filter(m => (m.topic || "").trim() === currentTopicName);
+
+    if (monthlyList.length === 0) {
+      container.innerHTML = '<div class="status-hint">本月主題尚無心得分享，歡迎前往留下第一篇心得！</div>';
       return;
     }
 
-    container.innerHTML = messages.map(m => `
+    container.innerHTML = monthlyList.map(m => `
       <div class="msg-card">
         <div class="msg-header">
           <span class="msg-author">${escapeHtml(m.name)} ${m.dharmaName && m.dharmaName !== '無' ? `(${escapeHtml(m.dharmaName)})` : ''}</span>
           <span>${m.time}</span>
         </div>
-        <div class="msg-topic">主題：${escapeHtml(m.topic)}</div>
+        <div class="msg-topic-tag">本月：${escapeHtml(m.topic)}</div>
         <div class="msg-body">${escapeHtml(m.content)}</div>
       </div>
     `).join("");
   }
 
-  // 簡易防 XSS 跳脫
   function escapeHtml(str) {
     return (str || "").replace(/[&<>"']/g, function(m) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
     });
   }
 
-  // 監聽送出事件
+  // 監聽心得表單送出
   document.getElementById("commentForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -228,8 +414,10 @@
 
       alert("感恩分享！觀行心得已成功送出。");
       document.getElementById("content").value = "";
-      // 重新載入列表
-      setTimeout(loadData, 1500);
+      
+      // 送出後自動切換至心得牆看最新結果
+      await loadData();
+      switchView('wall');
     } catch (err) {
       alert("提交失敗，請檢查網路連線或稍後再試。");
       console.error(err);
@@ -239,7 +427,6 @@
     }
   });
 
-  // 初次執行
   loadData();
 </script>
 
