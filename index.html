@@ -507,9 +507,10 @@
 <script>
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
-  // 圖檔設定
-  const IMG_WRITE = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ"; 
-  const IMG_WALL = "https://lh3.googleusercontent.com/d/1RBD_FWEvd2gmg21tU_t6Mu0eo_owT263";  
+  // 三個專屬頁面的透明插圖設定
+  const IMG_WRITE   = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ"; // 填寫頁：橫幅主題插圖
+  const IMG_WALL    = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy"; // 心光薈萃：提筆小星星人
+  const IMG_ARCHIVE = "https://lh3.googleusercontent.com/d/1oe_pVYSqd8H2xaLJpSINDGRx9p49Fe3u"; // 歷溯心光：專屬插圖
 
   let currentTopicName = "";
   let allMessages = [];
@@ -544,7 +545,7 @@
     } else if (viewName === 'archive') {
       archiveSection.style.display = "block";
       titleEl.innerText = "歷溯心光";
-      imgEl.src = IMG_WALL;
+      imgEl.src = IMG_ARCHIVE;
       renderArchiveWall();
     }
 
