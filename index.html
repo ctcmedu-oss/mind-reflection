@@ -29,10 +29,11 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
-      padding: 24px 16px;
+      padding: 20px 14px;
       display: flex;
       justify-content: center;
       line-height: 1.6;
+      word-break: break-word; /* 避免任何長字串造成橫向破版 */
     }
 
     .container {
@@ -52,7 +53,7 @@
       letter-spacing: 3px;
     }
 
-    /* 角色插圖樣式 (縮小、透明無底色、置中) */
+    /* 頂部圖片樣式 (縮小、透明無底色、置中) */
     .banner-wrapper {
       width: 100%;
       margin: 0 auto 20px auto;
@@ -67,6 +68,7 @@
       height: auto;
       display: block;
       background: transparent;
+      transition: opacity 0.2s ease;
     }
 
     /* 資訊導讀卡片 (本月主題、說明、指南針) */
@@ -94,6 +96,7 @@
       color: var(--primary-color);
       margin-bottom: 10px;
       line-height: 1.4;
+      word-break: break-word;
     }
 
     /* 主題說明：純文字呈現 */
@@ -102,6 +105,7 @@
       color: var(--text-main);
       margin-bottom: 16px;
       white-space: pre-wrap;
+      word-break: break-word;
       line-height: 1.6;
     }
 
@@ -147,6 +151,7 @@
     }
     .guide-text {
       flex: 1;
+      word-break: break-word;
     }
 
     /* 表單區塊 */
@@ -177,6 +182,7 @@
       color: var(--text-main);
       background: #ffffff;
       outline: none;
+      word-break: break-word;
     }
     input[type="text"]:focus, textarea:focus {
       border-color: var(--accent-color);
@@ -189,6 +195,7 @@
     textarea {
       resize: vertical;
       min-height: 180px;
+      line-height: 1.5;
     }
 
     /* 送出心得按鈕 */
@@ -235,8 +242,8 @@
       background-color: #f7f2ea;
     }
 
-    /* 心得牆區塊 */
-    .wall-header-btn {
+    /* 心得牆：返回按鍵樣式 */
+    .wall-back-btn {
       background-color: #e8dcd0;
       color: var(--primary-color);
       border: 2px solid var(--primary-color);
@@ -246,9 +253,23 @@
       border-radius: 12px;
       width: 100%;
       cursor: pointer;
-      margin-bottom: 24px;
       text-align: center;
+      box-sizing: border-box;
+      display: block;
+      transition: background-color 0.2s;
     }
+    .wall-back-btn:hover {
+      background-color: #ded0c2;
+    }
+    .wall-back-btn.top {
+      margin-bottom: 24px;
+    }
+    .wall-back-btn.bottom {
+      margin-top: 28px;
+      margin-bottom: 40px;
+    }
+
+    /* 心得卡片 */
     .msg-card {
       background: var(--card-bg);
       padding: 24px;
@@ -260,9 +281,10 @@
     .msg-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
       flex-wrap: wrap;
-      font-size: 32px;
+      gap: 8px;
+      font-size: 30px;
       color: var(--text-muted);
       margin-bottom: 12px;
       border-bottom: 2px solid var(--border-color);
@@ -271,6 +293,12 @@
     .msg-author {
       font-weight: 800;
       color: var(--primary-color);
+      word-break: break-word;
+    }
+    .msg-time {
+      font-size: 26px;
+      color: #9c8e84;
+      white-space: nowrap;
     }
     .msg-topic-tag {
       display: inline-block;
@@ -279,13 +307,16 @@
       font-weight: 700;
       padding: 4px 16px;
       border-radius: 20px;
-      font-size: 32px;
+      font-size: 30px;
       margin-bottom: 14px;
+      word-break: break-word;
     }
     .msg-body {
       white-space: pre-wrap;
+      word-break: break-word;
       font-size: 32px;
       color: var(--text-main);
+      line-height: 1.6;
     }
     .status-hint {
       text-align: center;
@@ -293,21 +324,44 @@
       color: var(--text-muted);
       padding: 40px 0;
     }
+
+    /* 右下角懸浮回頂部按鈕 (平滑滾動) */
+    .scroll-top-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-size: 32px;
+      font-weight: bold;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 100;
+      transition: opacity 0.2s;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <h1>文心觀照</h1>
+    <h1 id="pageMainTitle">文心觀照</h1>
   </header>
 
-  <!-- 角色插圖 -->
+  <!-- 頂部動態圖片 (填寫頁為小星星人，心光薈萃頁為指定插圖) -->
   <div class="banner-wrapper">
     <img 
+      id="pageBannerImg"
       class="banner-img" 
-      src="https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ" 
-      alt="文心觀照 插圖"
+      src="https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy" 
+      alt="頁面插圖"
       loading="lazy"
     >
   </div>
@@ -319,7 +373,7 @@
       <div class="topic-badge">本月主題</div>
       <div class="intro-topic-title" id="displayTopic">載入主題中...</div>
       
-      <!-- 主題說明：直接顯示內容 -->
+      <!-- 主題說明：純文字呈現 -->
       <div class="intro-desc" id="displayDesc"></div>
 
       <!-- 觀行指南針：附指南針圖示與自動星星清單 -->
@@ -351,7 +405,7 @@
         <button type="submit" class="action-btn" id="submitBtn">送出觀照心得</button>
       </form>
 
-      <!-- 放置於送出心得按鈕下方的心光薈萃入口 -->
+      <!-- 送出按鈕下方的心光薈萃入口 -->
       <button type="button" class="wall-entry-btn" onclick="switchView('wall')">
         <span>✨ 心光薈萃 (觀看大家的心得)</span>
       </button>
@@ -360,32 +414,51 @@
 
   <!-- 【分頁二：心光薈萃 (心得牆展示區)】 -->
   <div id="wallSection" style="display: none;">
-    <button class="wall-header-btn" onclick="switchView('write')">⬅️ 返回填寫心得留言</button>
+    <!-- 頂部返回鍵 -->
+    <button class="wall-back-btn top" onclick="switchView('write')">⬅️ 返回填寫心得留言</button>
+    
+    <!-- 心得清單 -->
     <div id="wallMessagesList">
       <div class="status-hint">正在載入本月心得...</div>
     </div>
+
+    <!-- 底部返回鍵：方便大家看完所有心得後直接返回 -->
+    <button class="wall-back-btn bottom" onclick="switchView('write')">✍️ 返回填寫心得留言</button>
   </div>
 </div>
+
+<!-- 右下角懸浮回頂部按鈕 -->
+<div class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">↑</div>
 
 <script>
   // 您的 Apps Script 專屬 API 網址
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
+  // 兩張圖片網址
+  const IMG_WRITE = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy"; // 寫字小星星人
+  const IMG_WALL = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ";  // 心光薈萃專屬圖
+
   let currentTopicName = "";
   let allMessages = [];
 
-  // 切換視圖
+  // 切換視圖 (更新標題與插圖)
   function switchView(viewName) {
     const writeSection = document.getElementById("writeSection");
     const wallSection = document.getElementById("wallSection");
+    const titleEl = document.getElementById("pageMainTitle");
+    const imgEl = document.getElementById("pageBannerImg");
 
     if (viewName === 'write') {
       writeSection.style.display = "block";
       wallSection.style.display = "none";
+      titleEl.innerText = "文心觀照";
+      imgEl.src = IMG_WRITE;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       writeSection.style.display = "none";
       wallSection.style.display = "block";
+      titleEl.innerText = "心光薈萃";
+      imgEl.src = IMG_WALL;
       renderMonthlyWall();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -413,7 +486,7 @@
         descEl.style.display = "none";
       }
 
-      // 2. 呈現觀行指南針 (自動切割並加星星)
+      // 2. 呈現觀行指南針 (自動切割換行並加上星星)
       const guideBox = document.getElementById("guideBox");
       const guideContainer = document.getElementById("displayGuide");
       const rawGuide = (data.guide ? String(data.guide) : "").trim();
@@ -435,11 +508,11 @@
       allMessages = data.messages || [];
     } catch (err) {
       document.getElementById("displayTopic").innerText = "無法載入主題，請稍候重整";
-      console.error("載入失敗詳細原因：", err);
+      console.error("載入失敗原因：", err);
     }
   }
 
-  // 渲染心得牆 (只挑出本月心得)
+  // 渲染心得牆 (只挑出當月主題心得，強化手機排版換行)
   function renderMonthlyWall() {
     const container = document.getElementById("wallMessagesList");
     
@@ -454,7 +527,7 @@
       <div class="msg-card">
         <div class="msg-header">
           <span class="msg-author">${escapeHtml(m.name)} ${m.dharmaName && m.dharmaName !== '無' ? `(${escapeHtml(m.dharmaName)})` : ''}</span>
-          <span>${m.time}</span>
+          <span class="msg-time">${m.time}</span>
         </div>
         <div class="msg-topic-tag">本月：${escapeHtml(m.topic)}</div>
         <div class="msg-body">${escapeHtml(m.content)}</div>
@@ -467,6 +540,21 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
     });
   }
+
+  // 平滑回頂部功能
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 監聽滾動以顯示/隱藏回頂部按鈕
+  window.addEventListener("scroll", () => {
+    const btn = document.getElementById("scrollTopBtn");
+    if (window.scrollY > 300) {
+      btn.style.display = "flex";
+    } else {
+      btn.style.display = "none";
+    }
+  });
 
   // 監聽心得表單送出
   document.getElementById("commentForm").addEventListener("submit", async function(e) {
@@ -493,7 +581,7 @@
       alert("感恩分享！觀行心得已成功送出。");
       document.getElementById("content").value = "";
       
-      // 送出後自動更新並跳轉至心得牆
+      // 送出成功後自動重新載入並切換至心得牆
       await loadData();
       switchView('wall');
     } catch (err) {
