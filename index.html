@@ -477,8 +477,8 @@
       <span>📜 歷溯心光（歷年心得回顧）</span>
     </button>
 
-    <!-- 底部返回鍵 -->
-    <button class="wall-back-btn" onclick="switchView('write')">✍️ 返回填寫心得留言</button>
+    <!-- 底部返回鍵：已更新為返回填寫文心觀照 -->
+    <button class="wall-back-btn" onclick="switchView('write')">✍️ 返回填寫文心觀照</button>
   </div>
 
   <!-- 【分頁三：歷溯心光 (歷年心得回顧區)】 -->
@@ -515,7 +515,7 @@
     textarea.style.height = (textarea.scrollHeight) + 'px';
   }
 
-  // 切換三個視圖：'write' (填寫), 'wall' (當月心光薈萃), 'archive' (歷溯心光)
+  // 切換三個視圖
   function switchView(viewName) {
     const writeSection = document.getElementById("writeSection");
     const wallSection = document.getElementById("wallSection");
@@ -597,7 +597,6 @@
   // 1. 渲染「當月」心得 (心光薈萃)
   function renderMonthlyWall() {
     const container = document.getElementById("wallMessagesList");
-    // 嚴格只挑選符合當月主題的留言
     const monthlyList = allMessages.filter(m => (m.topic || "").trim() === currentTopicName);
 
     if (monthlyList.length === 0) {
@@ -622,7 +621,6 @@
     const filterBar = document.getElementById("yearFilterBar");
     const container = document.getElementById("archiveMessagesList");
 
-    // 抓出所有不屬於當前主題的心得 (舊心得)
     const archiveList = allMessages.filter(m => (m.topic || "").trim() !== currentTopicName);
 
     if (archiveList.length === 0) {
@@ -631,7 +629,6 @@
       return;
     }
 
-    // 取得所有存在的年份集合
     const yearsSet = new Set();
     archiveList.forEach(m => {
       if (m.time) {
@@ -642,14 +639,12 @@
 
     const years = Array.from(yearsSet).sort((a, b) => b - a);
 
-    // 建立年份切換按鈕
     let filterHtml = `<button class="year-btn ${selectedYear === 'ALL' ? 'active' : ''}" onclick="selectArchiveYear('ALL')">全部年份</button>`;
     years.forEach(yr => {
       filterHtml += `<button class="year-btn ${selectedYear === yr ? 'active' : ''}" onclick="selectArchiveYear('${yr}')">${yr} 年</button>`;
     });
     filterBar.innerHTML = filterHtml;
 
-    // 依選取的年份過濾
     const filtered = selectedYear === 'ALL' 
       ? archiveList 
       : archiveList.filter(m => m.time && m.time.startsWith(selectedYear));
