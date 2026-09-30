@@ -1,1 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文心觀照 - 線上留言板</title>
+  <style>
+    :root {
+      --primary-color: #5c6b73;
+      --accent-color: #9db4c0;
+      --bg-color: #f7f9fb;
+      --card-bg: #ffffff;
+      --text-main: #2b2d42;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      letter-spacing: 2px;
+      color: var(--primary-color);
+    }
+    .topic-banner {
+      background: #e0e7ec;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      margin-top: 12px;
+    }
+    .form-card, .msg-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dcdcdc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+    input[readonly] {
+      background-color: #f1f3f5;
+      color: #6c757d;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .msg-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #7b8794;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 6px;
+    }
+    .msg-author {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    .msg-topic {
+      display: inline-block;
+      background: #edf2f4;
+      color: #4a5568;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .msg-body {
+      white-space: pre-wrap;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
 
+<div class="container">
+  <header>
+    <h1>文心觀照</h1>
+    <div class="topic-banner" id="bannerTopic">載入本月主題中...</div>
+  </header>
+
+  <!-- 填寫表單 -->
+  <div class="form-card">
+    <form id="commentForm">
+      <div class="form-group">
+        <label for="name">姓名</label>
+        <input type="text" id="name" required placeholder="請填寫您的姓名">
+      </div>
+      <div class="form-group">
+        <label for="dharmaName">法名 (選填)</label>
+        <input type="text" id="dharmaName" placeholder="若無法名可留空">
+      </div>
+      <div class="form-group">
+        <label for="topic">本月主題</label>
+        <input type="text" id="topic" readonly value="載入中...">
+      </div>
+      <div class="form-group">
+        <label for="content">觀行心得</label>
+        <textarea id="content" required placeholder="寫下您這個月份的觀行、學習或實踐心得..."></textarea>
+      </div>
+      <button type="submit" id="submitBtn">送出觀照心得</button>
+    </form>
+  </div>
+
+  <!-- 留言展示列表 -->
+  <div id="messagesList">
+    <p style="text-align: center; color: #888;">正在載入留言...</p>
+  </div>
+</div>
+
+<script>
+  // 請置換為您的 Apps Script 網頁應用程式 URL
+  const GAS_URL = "YOUR_GAS_API_URL_HERE";
+
+  let currentMonthlyTopic = "";
+
+  // 載入資料 (主題與既有留言)
+  async function loadData() {
+    try {
+      const response = await fetch(GAS_URL);
+      const data = await response.json();
+
+      currentMonthlyTopic = data.topic;
+      document.getElementById("bannerTopic").innerText = `本月主題：${data.topic}`;
+      document.getElementById("topic").value = data.topic;
+
+      renderMessages(data.messages);
+    } catch (err) {
+      document.getElementById("bannerTopic").innerText = "無法載入主題，請稍候再試";
+      console.error(err);
+    }
+  }
+
+  // 渲染留言清單
+  function renderMessages(messages) {
+    const container = document.getElementById("messagesList");
+    if (!messages || messages.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: #888;">目前尚無心得分享，歡迎搶先留言！</p>';
+      return;
+    }
+
+    container.innerHTML = messages.map(m => `
+      <div class="msg-card">
+        <div class="msg-header">
+          <span class="msg-author">${escapeHtml(m.name)} ${m.dharmaName && m.dharmaName !== '無' ? `(${escapeHtml(m.dharmaName)})` : ''}</span>
+          <span>${m.time}</span>
+        </div>
+        <div class="msg-topic">主題：${escapeHtml(m.topic)}</div>
+        <div class="msg-body">${escapeHtml(m.content)}</div>
+      </div>
+    `).join("");
+  }
+
+  // 簡易防 XSS 跳脫
+  function escapeHtml(str) {
+    return (str || "").replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+
+  // 監聽送出事件
+  document.getElementById("commentForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+    submitBtn.innerText = "傳送中...";
+
+    const payload = {
+      name: document.getElementById("name").value.trim(),
+      dharmaName: document.getElementById("dharmaName").value.trim(),
+      content: document.getElementById("content").value.trim()
+    };
+
+    try {
+      await fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      alert("感恩分享！觀行心得已成功送出。");
+      document.getElementById("content").value = "";
+      // 重新載入列表
+      setTimeout(loadData, 1500);
+    } catch (err) {
+      alert("提交失敗，請檢查網路連線或稍後再試。");
+      console.error(err);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = "送出觀照心得";
+    }
+  });
+
+  // 初次執行
+  loadData();
+</script>
+
+</body>
+</html>
