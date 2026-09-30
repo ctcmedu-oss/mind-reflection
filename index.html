@@ -129,7 +129,7 @@
       line-height: 1.6;
     }
 
-    /* 觀行指南針提示區 (向上微調位置、減小上邊距) */
+    /* 觀行指南針提示區 */
     .intro-guide {
       background: var(--guide-bg);
       border: 2px dashed #d1b8a5;
@@ -313,10 +313,10 @@
     >
   </div>
 
-  <!-- 頁籤導覽列 (分頁切換) -->
+  <!-- 頁籤導覽列 (已更新為 ✨ 心光薈萃) -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tabWriteBtn" onclick="switchView('write')">✍️ 填寫心得</button>
-    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">🌸 心光匯萃</button>
+    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">✨ 心光薈萃</button>
   </div>
 
   <!-- 本月主題導讀卡片 -->
@@ -427,7 +427,6 @@
 
       if (rawGuide) {
         guideBox.style.display = "block";
-        // 依照換行切割每一條項目，並過濾掉空行
         const lines = rawGuide.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
         
         guideContainer.innerHTML = lines.map(line => `
@@ -501,7 +500,6 @@
       alert("感恩分享！觀行心得已成功送出。");
       document.getElementById("content").value = "";
       
-      // 送出後自動更新並切換至心得牆看最新結果
       await loadData();
       switchView('wall');
     } catch (err) {
