@@ -18,7 +18,7 @@
       --primary-hover: #734a2e;
       --accent-color: #c97a56;      /* 暖陶紅 / 陶土橙 */
       --accent-light: #fbeee6;      /* 陶土淡底色 */
-      --guide-bg: #f5efe6;          /* 指南針淡杏色 */
+      --guide-bg: #f7f2ea;          /* 指南針淡杏色 */
       --text-main: #3d312a;         /* 深暖灰褐字 */
       --text-muted: #7d7067;        /* 次要文字灰褐色 */
       --border-color: #e5ded5;      /* 溫和分隔線 */
@@ -63,7 +63,7 @@
     }
     .banner-img {
       width: 100%;
-      max-width: 280px;      /* 限制圖片寬度，小巧雅致 */
+      max-width: 280px;
       height: auto;
       display: block;
       background: transparent;
@@ -110,44 +110,67 @@
       background: var(--accent-color);
       padding: 6px 20px;
       border-radius: 30px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .intro-topic-title {
       font-size: 40px;
       font-weight: 800;
       color: var(--primary-color);
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       line-height: 1.4;
     }
 
-    /* 直接呈現主題說明文字，無多餘標題字樣 */
+    /* 主題說明：緊湊、直接呈現純文字 */
     .intro-desc {
       font-size: 32px;
       color: var(--text-main);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       white-space: pre-wrap;
-      line-height: 1.7;
+      line-height: 1.6;
     }
 
-    /* 觀行指南針提示區 */
+    /* 觀行指南針提示區 (向上微調位置、減小上邊距) */
     .intro-guide {
       background: var(--guide-bg);
-      border: 2px dashed var(--accent-color);
+      border: 2px dashed #d1b8a5;
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px 20px;
       font-size: 32px;
       color: #4a3b32;
-      white-space: pre-wrap;
-      line-height: 1.7;
+      line-height: 1.6;
+      margin-top: 8px;
     }
     .guide-title {
       font-weight: 800;
       color: var(--primary-color);
-      margin-bottom: 10px;
+      margin: 0 0 12px 0;
       font-size: 34px;
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* 指南針清單項目 (星星 + 內文) */
+    .guide-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .guide-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 32px;
+      line-height: 1.6;
+    }
+    .guide-star {
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 1.6;
+      user-select: none;
+    }
+    .guide-text {
+      flex: 1;
     }
 
     /* 表單區塊 */
@@ -304,10 +327,10 @@
     <!-- 主題說明：直接顯示內容 -->
     <div class="intro-desc" id="displayDesc"></div>
 
-    <!-- 觀行指南針：附指南針圖示與標題 -->
+    <!-- 觀行指南針：附指南針圖示與自動星星清單 -->
     <div class="intro-guide" id="guideBox" style="display: none;">
       <div class="guide-title">🧭 觀行指南針</div>
-      <div id="displayGuide"></div>
+      <div class="guide-list" id="displayGuide"></div>
     </div>
   </div>
 
@@ -397,12 +420,22 @@
         descEl.style.display = "none";
       }
 
-      // 2. 呈現觀行指南針
+      // 2. 呈現觀行指南針 (依換行切成多點，自動加星星)
       const guideBox = document.getElementById("guideBox");
-      const guideEl = document.getElementById("displayGuide");
-      if (data.guide && String(data.guide).trim()) {
+      const guideContainer = document.getElementById("displayGuide");
+      const rawGuide = (data.guide ? String(data.guide) : "").trim();
+
+      if (rawGuide) {
         guideBox.style.display = "block";
-        guideEl.innerText = String(data.guide).trim();
+        // 依照換行切割每一條項目，並過濾掉空行
+        const lines = rawGuide.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        
+        guideContainer.innerHTML = lines.map(line => `
+          <div class="guide-item">
+            <span class="guide-star">⭐</span>
+            <span class="guide-text">${escapeHtml(line)}</span>
+          </div>
+        `).join("");
       } else {
         guideBox.style.display = "none";
       }
