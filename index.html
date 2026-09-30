@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文心觀照 - 線上留言板</title>
 
-  <!-- 手機加入桌面 App 圖示設定 -->
-  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w192">
-  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w192">
+  <!-- 手機加入桌面 App 圖示設定 (已修正 ID) -->
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w512">
+  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w512">
 
   <style>
     :root {
@@ -257,7 +257,7 @@
   <!-- 頁籤導覽列 (分頁切換) -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tabWriteBtn" onclick="switchView('write')">✍️ 填寫心得</button>
-    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">🌸 心光匯萃 </button>
+    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">🌸 心光匯萃</button>
   </div>
 
   <!-- 本月主題導讀卡片 -->
@@ -306,8 +306,8 @@
 </div>
 
 <script>
-  // 請填入您的 Apps Script 網頁應用程式 URL
-  const GAS_URL = "YOUR_GAS_API_URL_HERE";
+  // 您的 Apps Script 專屬 API 網址 (已填入)
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
   let currentTopicName = "";
   let allMessages = [];
