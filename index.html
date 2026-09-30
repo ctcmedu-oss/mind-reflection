@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文心觀照 - 線上留言板</title>
 
-  <!-- 手機加入桌面 App 圖示設定 (已修正 ID) -->
+  <!-- 手機加入桌面 App 圖示設定 -->
   <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w512">
   <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1og0C_G3CP0USYrX33zs-d89sSAp00Wdy&sz=w512">
 
@@ -43,13 +43,32 @@
     /* 頂部標題 */
     header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     h1 {
       font-size: 46px;
       margin: 0 0 16px 0;
       color: var(--primary-color);
       letter-spacing: 3px;
+    }
+
+    /* 橫幅圖片樣式 */
+    .banner-wrapper {
+      width: 100%;
+      margin: 0 auto 24px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.12);
+      background-color: #eee4dc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .banner-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
     }
 
     /* 分頁切換列 */
@@ -254,6 +273,16 @@
     <h1>文心觀照</h1>
   </header>
 
+  <!-- 橫幅插圖 -->
+  <div class="banner-wrapper">
+    <img 
+      class="banner-img" 
+      src="https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ" 
+      alt="文心觀照 主題意象"
+      loading="lazy"
+    >
+  </div>
+
   <!-- 頁籤導覽列 (分頁切換) -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tabWriteBtn" onclick="switchView('write')">✍️ 填寫心得</button>
@@ -306,7 +335,7 @@
 </div>
 
 <script>
-  // 您的 Apps Script 專屬 API 網址 (已填入)
+  // 您的 Apps Script 專屬 API 網址
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
   let currentTopicName = "";
@@ -339,6 +368,9 @@
   async function loadData() {
     try {
       const response = await fetch(GAS_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP 錯誤狀態碼: ${response.status}`);
+      }
       const data = await response.json();
 
       currentTopicName = (data.topic || "").trim();
@@ -351,12 +383,14 @@
       if (data.guide) {
         document.getElementById("guideBox").style.display = "block";
         document.getElementById("displayGuide").innerText = data.guide;
+      } else {
+        document.getElementById("guideBox").style.display = "none";
       }
 
       allMessages = data.messages || [];
     } catch (err) {
       document.getElementById("displayTopic").innerText = "無法載入主題，請稍候重整";
-      console.error(err);
+      console.error("載入失敗詳細原因：", err);
     }
   }
 
