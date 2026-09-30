@@ -19,7 +19,6 @@
       --accent-color: #c97a56;      /* 暖陶紅 / 陶土橙 */
       --accent-light: #fbeee6;      /* 陶土淡底色 */
       --guide-bg: #f7f2ea;          /* 指南針淡杏色 */
-      --paper-bg: #fffdf9;          /* 觀行箋信紙色 */
       --text-main: #3d312a;         /* 深暖灰褐字 */
       --text-muted: #7d7067;        /* 次要文字灰褐色 */
       --border-color: #e5ded5;      /* 溫和分隔線 */
@@ -42,22 +41,21 @@
       max-width: 820px;
     }
 
-    /* 頂部標題：大幅強化標題大器感 */
+    /* 頂部標題 */
     header {
       text-align: center;
       margin-bottom: 14px;
     }
     h1 {
-      font-size: 54px;              /* 顯著放大，標題感更強 */
+      font-size: 54px;
       font-weight: 800;
       margin: 0 0 10px 0;
       color: var(--primary-color);
       letter-spacing: 5px;
-      text-shadow: 1px 1px 2px rgba(140, 94, 60, 0.15);
       font-family: "PingFang TC", "BiauKai", "Kaiti TC", "Microsoft JhengHei", serif;
     }
 
-    /* 頂部插圖 */
+    /* 頂部插圖 (透明無底色、無特效) */
     .banner-wrapper {
       width: 100%;
       margin: 0 auto 20px auto;
@@ -151,7 +149,7 @@
       word-break: break-word;
     }
 
-    /* 表單外層大卡片 */
+    /* 表單區塊 */
     .form-card {
       background: var(--card-bg);
       padding: 30px 24px;
@@ -169,7 +167,7 @@
       font-weight: 700;
       color: var(--primary-color);
     }
-    input[type="text"] {
+    input[type="text"], textarea {
       width: 100%;
       padding: 16px 18px;
       border: 2px solid var(--border-color);
@@ -180,8 +178,9 @@
       background: #ffffff;
       outline: none;
       word-break: break-word;
+      font-family: inherit;
     }
-    input[type="text"]:focus {
+    input[type="text"]:focus, textarea:focus {
       border-color: var(--accent-color);
     }
     input[readonly] {
@@ -189,52 +188,13 @@
       color: var(--text-muted);
       cursor: not-allowed;
     }
-
-    /* 觀行卡片專屬造型 (信箋卡片設計感) */
-    .paper-card-container {
-      background: var(--paper-bg);
-      border: 2px solid #e2d3c3;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: inset 0 2px 8px rgba(140, 94, 60, 0.04);
-      position: relative;
-    }
-    .paper-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      border-bottom: 1px dashed #d9c7b5;
-      padding-bottom: 8px;
-    }
-    .paper-card-tag {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary-color);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .paper-card-hint {
-      font-size: 24px;
-      color: var(--text-muted);
-    }
-
-    /* 觀行心得輸入框：超大空間 + 自動隨文字拉伸高度 */
+    
+    /* 觀行心得輸入框 (原版大框設計，支援自動伸長) */
     textarea#content {
-      width: 100%;
-      min-height: 340px;           /* 初始高度大幅提高 */
-      padding: 12px 6px;
-      border: none;
-      background: transparent;
-      box-sizing: border-box;
-      font-size: 32px;
-      line-height: 1.65;
-      color: var(--text-main);
-      outline: none;
-      resize: none;                 /* 由 JS 自動增長，無需手動拉扯 */
-      overflow-y: hidden;           /* 隱藏滾動條，全部鋪平顯示 */
-      font-family: inherit;
+      min-height: 320px;
+      line-height: 1.6;
+      resize: none;
+      overflow-y: hidden;
     }
 
     /* 送出心得按鈕 */
@@ -282,12 +242,12 @@
       background-color: #f7f2ea;
     }
 
-    /* 心得牆：返回鍵 */
+    /* 底部返回鍵樣式 */
     .wall-back-btn {
       background-color: #e8dcd0;
       color: var(--primary-color);
       border: 2px solid var(--primary-color);
-      padding: 16px;
+      padding: 18px;
       font-size: 32px;
       font-weight: 700;
       border-radius: 12px;
@@ -296,17 +256,12 @@
       text-align: center;
       box-sizing: border-box;
       display: block;
+      margin-top: 30px;
+      margin-bottom: 40px;
       transition: background-color 0.2s;
     }
     .wall-back-btn:hover {
       background-color: #ded0c2;
-    }
-    .wall-back-btn.top {
-      margin-bottom: 24px;
-    }
-    .wall-back-btn.bottom {
-      margin-top: 28px;
-      margin-bottom: 40px;
     }
 
     /* 心得展示卡片 */
@@ -395,12 +350,12 @@
     <h1 id="pageMainTitle">文心觀照</h1>
   </header>
 
-  <!-- 頂部插圖 (填寫頁為小星星人，心光薈萃頁為指定圖) -->
+  <!-- 頂部插圖 (預設文心觀照頁面，使用橫幅插圖) -->
   <div class="banner-wrapper">
     <img 
       id="pageBannerImg"
       class="banner-img" 
-      src="https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy" 
+      src="https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ" 
       alt="頁面插圖"
       loading="lazy"
     >
@@ -439,21 +394,14 @@
           <input type="text" id="topic" readonly value="載入中...">
         </div>
 
-        <!-- 觀行心得：信箋卡片化設計 -->
         <div class="form-group">
           <label for="content">觀行心得</label>
-          <div class="paper-card-container">
-            <div class="paper-card-header">
-              <span class="paper-card-tag">🔖 觀行心箋</span>
-              <span class="paper-card-hint">隨寫隨展・文字不設限</span>
-            </div>
-            <textarea 
-              id="content" 
-              required 
-              placeholder="請依本月主題與觀行指南針，寫下您的日常觀照心得......"
-              oninput="autoResize(this)"
-            ></textarea>
-          </div>
+          <textarea 
+            id="content" 
+            required 
+            placeholder="請依本月主題與觀行指南針，寫下您的日常觀照心得......"
+            oninput="autoResize(this)"
+          ></textarea>
         </div>
 
         <button type="submit" class="action-btn" id="submitBtn">送出觀照心得</button>
@@ -468,16 +416,13 @@
 
   <!-- 【分頁二：心光薈萃 (心得牆展示區)】 -->
   <div id="wallSection" style="display: none;">
-    <!-- 頂部返回鍵 -->
-    <button class="wall-back-btn top" onclick="switchView('write')">⬅️ 返回填寫心得留言</button>
-    
-    <!-- 心得清單 -->
+    <!-- 心得清單 (上方無多餘返回鍵) -->
     <div id="wallMessagesList">
       <div class="status-hint">正在載入本月心得...</div>
     </div>
 
-    <!-- 底部返回鍵 -->
-    <button class="wall-back-btn bottom" onclick="switchView('write')">✍️ 返回填寫心得留言</button>
+    <!-- 僅保留底部這一組返回鍵 -->
+    <button class="wall-back-btn" onclick="switchView('write')">✍️ 返回填寫心得留言</button>
   </div>
 </div>
 
@@ -487,13 +432,16 @@
 <script>
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
-  const IMG_WRITE = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy"; 
-  const IMG_WALL = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ";  
+  // 正確對應的兩張透明圖檔：
+  // 文心觀照頁面使用：橫幅圖
+  const IMG_WRITE = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ"; 
+  // 心光薈萃頁面使用：寫字小星星人圖
+  const IMG_WALL = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy";  
 
   let currentTopicName = "";
   let allMessages = [];
 
-  // 觀行心箋輸入框：字數增多時自動往下伸展高度
+  // 自動依字數延伸 textarea 高度
   function autoResize(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight) + 'px';
@@ -636,7 +584,7 @@
 
       alert("感恩分享！觀行心得已成功送出。");
       contentInput.value = "";
-      contentInput.style.height = '340px'; // 重設回初始高度
+      contentInput.style.height = '320px';
       
       await loadData();
       switchView('wall');
