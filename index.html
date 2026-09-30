@@ -69,30 +69,6 @@
       background: transparent;
     }
 
-    /* 分頁切換列 */
-    .tab-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 16px 12px;
-      font-size: 32px;
-      font-weight: 700;
-      border: 3px solid var(--primary-color);
-      border-radius: 12px;
-      background: #ffffff;
-      color: var(--primary-color);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-    .tab-btn.active {
-      background: var(--primary-color);
-      color: #ffffff;
-    }
-
     /* 資訊導讀卡片 (本月主題、說明、指南針) */
     .intro-card {
       background: var(--card-bg);
@@ -120,7 +96,7 @@
       line-height: 1.4;
     }
 
-    /* 主題說明：緊湊、直接呈現純文字 */
+    /* 主題說明：純文字呈現 */
     .intro-desc {
       font-size: 32px;
       color: var(--text-main);
@@ -215,7 +191,7 @@
       min-height: 180px;
     }
 
-    /* 按鈕樣式 */
+    /* 送出心得按鈕 */
     .action-btn {
       background-color: var(--primary-color);
       color: white;
@@ -234,6 +210,29 @@
     .action-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    /* 送出按鈕下方的心光薈萃入口按鍵 */
+    .wall-entry-btn {
+      margin-top: 20px;
+      background-color: #ffffff;
+      color: var(--primary-color);
+      border: 3px solid var(--primary-color);
+      padding: 16px 20px;
+      font-size: 32px;
+      font-weight: 700;
+      border-radius: 12px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .wall-entry-btn:hover {
+      background-color: #f7f2ea;
     }
 
     /* 心得牆區塊 */
@@ -303,7 +302,7 @@
     <h1>文心觀照</h1>
   </header>
 
-  <!-- 角色插圖 (縮小且無底色) -->
+  <!-- 角色插圖 -->
   <div class="banner-wrapper">
     <img 
       class="banner-img" 
@@ -313,29 +312,24 @@
     >
   </div>
 
-  <!-- 頁籤導覽列 (已更新為 ✨ 心光薈萃) -->
-  <div class="tab-bar">
-    <button class="tab-btn active" id="tabWriteBtn" onclick="switchView('write')">✍️ 填寫心得</button>
-    <button class="tab-btn" id="tabWallBtn" onclick="switchView('wall')">✨ 心光薈萃</button>
-  </div>
-
-  <!-- 本月主題導讀卡片 -->
-  <div class="intro-card">
-    <div class="topic-badge">本月主題</div>
-    <div class="intro-topic-title" id="displayTopic">載入主題中...</div>
-    
-    <!-- 主題說明：直接顯示內容 -->
-    <div class="intro-desc" id="displayDesc"></div>
-
-    <!-- 觀行指南針：附指南針圖示與自動星星清單 -->
-    <div class="intro-guide" id="guideBox" style="display: none;">
-      <div class="guide-title">🧭 觀行指南針</div>
-      <div class="guide-list" id="displayGuide"></div>
-    </div>
-  </div>
-
-  <!-- 【分頁一：留言填寫區】 -->
+  <!-- 【分頁一：留言填寫主頁面】 -->
   <div id="writeSection">
+    <!-- 本月主題導讀卡片 -->
+    <div class="intro-card">
+      <div class="topic-badge">本月主題</div>
+      <div class="intro-topic-title" id="displayTopic">載入主題中...</div>
+      
+      <!-- 主題說明：直接顯示內容 -->
+      <div class="intro-desc" id="displayDesc"></div>
+
+      <!-- 觀行指南針：附指南針圖示與自動星星清單 -->
+      <div class="intro-guide" id="guideBox" style="display: none;">
+        <div class="guide-title">🧭 觀行指南針</div>
+        <div class="guide-list" id="displayGuide"></div>
+      </div>
+    </div>
+
+    <!-- 表單填寫區 -->
     <div class="form-card">
       <form id="commentForm">
         <div class="form-group">
@@ -356,10 +350,15 @@
         </div>
         <button type="submit" class="action-btn" id="submitBtn">送出觀照心得</button>
       </form>
+
+      <!-- 放置於送出心得按鈕下方的心光薈萃入口 -->
+      <button type="button" class="wall-entry-btn" onclick="switchView('wall')">
+        <span>✨ 心光薈萃 (觀看大家的心得)</span>
+      </button>
     </div>
   </div>
 
-  <!-- 【分頁二：心得牆展示區】 -->
+  <!-- 【分頁二：心光薈萃 (心得牆展示區)】 -->
   <div id="wallSection" style="display: none;">
     <button class="wall-header-btn" onclick="switchView('write')">⬅️ 返回填寫心得留言</button>
     <div id="wallMessagesList">
@@ -375,24 +374,18 @@
   let currentTopicName = "";
   let allMessages = [];
 
-  // 切換分頁邏輯
+  // 切換視圖
   function switchView(viewName) {
     const writeSection = document.getElementById("writeSection");
     const wallSection = document.getElementById("wallSection");
-    const tabWriteBtn = document.getElementById("tabWriteBtn");
-    const tabWallBtn = document.getElementById("tabWallBtn");
 
     if (viewName === 'write') {
       writeSection.style.display = "block";
       wallSection.style.display = "none";
-      tabWriteBtn.classList.add("active");
-      tabWallBtn.classList.remove("active");
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       writeSection.style.display = "none";
       wallSection.style.display = "block";
-      tabWriteBtn.classList.remove("active");
-      tabWallBtn.classList.add("active");
       renderMonthlyWall();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -420,7 +413,7 @@
         descEl.style.display = "none";
       }
 
-      // 2. 呈現觀行指南針 (依換行切成多點，自動加星星)
+      // 2. 呈現觀行指南針 (自動切割並加星星)
       const guideBox = document.getElementById("guideBox");
       const guideContainer = document.getElementById("displayGuide");
       const rawGuide = (data.guide ? String(data.guide) : "").trim();
@@ -446,7 +439,7 @@
     }
   }
 
-  // 渲染心得牆 (只挑出符合當月主題的留言)
+  // 渲染心得牆 (只挑出本月心得)
   function renderMonthlyWall() {
     const container = document.getElementById("wallMessagesList");
     
@@ -500,6 +493,7 @@
       alert("感恩分享！觀行心得已成功送出。");
       document.getElementById("content").value = "";
       
+      // 送出後自動更新並跳轉至心得牆
       await loadData();
       switchView('wall');
     } catch (err) {
