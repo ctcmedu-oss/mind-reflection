@@ -19,6 +19,7 @@
       --accent-color: #c97a56;      /* 暖陶紅 / 陶土橙 */
       --accent-light: #fbeee6;      /* 陶土淡底色 */
       --guide-bg: #f7f2ea;          /* 指南針淡杏色 */
+      --paper-bg: #fffdf9;          /* 觀行箋信紙色 */
       --text-main: #3d312a;         /* 深暖灰褐字 */
       --text-muted: #7d7067;        /* 次要文字灰褐色 */
       --border-color: #e5ded5;      /* 溫和分隔線 */
@@ -29,11 +30,11 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
-      padding: 20px 14px;
+      padding: 24px 16px;
       display: flex;
       justify-content: center;
       line-height: 1.6;
-      word-break: break-word; /* 避免任何長字串造成橫向破版 */
+      word-break: break-word;
     }
 
     .container {
@@ -41,19 +42,22 @@
       max-width: 820px;
     }
 
-    /* 頂部標題 */
+    /* 頂部標題：大幅強化標題大器感 */
     header {
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     h1 {
-      font-size: 46px;
+      font-size: 54px;              /* 顯著放大，標題感更強 */
+      font-weight: 800;
       margin: 0 0 10px 0;
       color: var(--primary-color);
-      letter-spacing: 3px;
+      letter-spacing: 5px;
+      text-shadow: 1px 1px 2px rgba(140, 94, 60, 0.15);
+      font-family: "PingFang TC", "BiauKai", "Kaiti TC", "Microsoft JhengHei", serif;
     }
 
-    /* 頂部圖片樣式 (縮小、透明無底色、置中) */
+    /* 頂部插圖 */
     .banner-wrapper {
       width: 100%;
       margin: 0 auto 20px auto;
@@ -68,7 +72,6 @@
       height: auto;
       display: block;
       background: transparent;
-      transition: opacity 0.2s ease;
     }
 
     /* 資訊導讀卡片 (本月主題、說明、指南針) */
@@ -76,7 +79,7 @@
       background: var(--card-bg);
       border-left: 10px solid var(--accent-color);
       padding: 24px;
-      border-radius: 14px;
+      border-radius: 16px;
       box-shadow: 0 4px 16px rgba(140, 94, 60, 0.08);
       margin-bottom: 24px;
     }
@@ -91,15 +94,13 @@
       margin-bottom: 12px;
     }
     .intro-topic-title {
-      font-size: 40px;
+      font-size: 42px;
       font-weight: 800;
       color: var(--primary-color);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       line-height: 1.4;
       word-break: break-word;
     }
-
-    /* 主題說明：純文字呈現 */
     .intro-desc {
       font-size: 32px;
       color: var(--text-main);
@@ -108,8 +109,6 @@
       word-break: break-word;
       line-height: 1.6;
     }
-
-    /* 觀行指南針提示區 */
     .intro-guide {
       background: var(--guide-bg);
       border: 2px dashed #d1b8a5;
@@ -129,8 +128,6 @@
       align-items: center;
       gap: 10px;
     }
-
-    /* 指南針清單項目 (星星 + 內文) */
     .guide-list {
       display: flex;
       flex-direction: column;
@@ -154,12 +151,12 @@
       word-break: break-word;
     }
 
-    /* 表單區塊 */
+    /* 表單外層大卡片 */
     .form-card {
       background: var(--card-bg);
-      padding: 28px 24px;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.08);
+      padding: 30px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(140, 94, 60, 0.08);
       margin-bottom: 30px;
     }
     .form-group {
@@ -172,11 +169,11 @@
       font-weight: 700;
       color: var(--primary-color);
     }
-    input[type="text"], textarea {
+    input[type="text"] {
       width: 100%;
       padding: 16px 18px;
       border: 2px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
       box-sizing: border-box;
       font-size: 32px;
       color: var(--text-main);
@@ -184,7 +181,7 @@
       outline: none;
       word-break: break-word;
     }
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus {
       border-color: var(--accent-color);
     }
     input[readonly] {
@@ -192,14 +189,57 @@
       color: var(--text-muted);
       cursor: not-allowed;
     }
-    textarea {
-      resize: vertical;
-      min-height: 180px;
-      line-height: 1.5;
+
+    /* 觀行卡片專屬造型 (信箋卡片設計感) */
+    .paper-card-container {
+      background: var(--paper-bg);
+      border: 2px solid #e2d3c3;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: inset 0 2px 8px rgba(140, 94, 60, 0.04);
+      position: relative;
+    }
+    .paper-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px dashed #d9c7b5;
+      padding-bottom: 8px;
+    }
+    .paper-card-tag {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .paper-card-hint {
+      font-size: 24px;
+      color: var(--text-muted);
+    }
+
+    /* 觀行心得輸入框：超大空間 + 自動隨文字拉伸高度 */
+    textarea#content {
+      width: 100%;
+      min-height: 340px;           /* 初始高度大幅提高 */
+      padding: 12px 6px;
+      border: none;
+      background: transparent;
+      box-sizing: border-box;
+      font-size: 32px;
+      line-height: 1.65;
+      color: var(--text-main);
+      outline: none;
+      resize: none;                 /* 由 JS 自動增長，無需手動拉扯 */
+      overflow-y: hidden;           /* 隱藏滾動條，全部鋪平顯示 */
+      font-family: inherit;
     }
 
     /* 送出心得按鈕 */
     .action-btn {
+      margin-top: 10px;
       background-color: var(--primary-color);
       color: white;
       border: none;
@@ -219,7 +259,7 @@
       cursor: not-allowed;
     }
 
-    /* 送出按鈕下方的心光薈萃入口按鍵 */
+    /* 心光薈萃入口按鍵 */
     .wall-entry-btn {
       margin-top: 20px;
       background-color: #ffffff;
@@ -242,7 +282,7 @@
       background-color: #f7f2ea;
     }
 
-    /* 心得牆：返回按鍵樣式 */
+    /* 心得牆：返回鍵 */
     .wall-back-btn {
       background-color: #e8dcd0;
       color: var(--primary-color);
@@ -269,11 +309,11 @@
       margin-bottom: 40px;
     }
 
-    /* 心得卡片 */
+    /* 心得展示卡片 */
     .msg-card {
       background: var(--card-bg);
       padding: 24px;
-      border-radius: 14px;
+      border-radius: 16px;
       box-shadow: 0 4px 16px rgba(140, 94, 60, 0.06);
       margin-bottom: 22px;
       border-left: 8px solid var(--primary-color);
@@ -325,7 +365,7 @@
       padding: 40px 0;
     }
 
-    /* 右下角懸浮回頂部按鈕 (平滑滾動) */
+    /* 右下角懸浮回頂部按鈕 */
     .scroll-top-btn {
       position: fixed;
       right: 20px;
@@ -355,7 +395,7 @@
     <h1 id="pageMainTitle">文心觀照</h1>
   </header>
 
-  <!-- 頂部動態圖片 (填寫頁為小星星人，心光薈萃頁為指定插圖) -->
+  <!-- 頂部插圖 (填寫頁為小星星人，心光薈萃頁為指定圖) -->
   <div class="banner-wrapper">
     <img 
       id="pageBannerImg"
@@ -398,10 +438,24 @@
           <label for="topic">本月主題</label>
           <input type="text" id="topic" readonly value="載入中...">
         </div>
+
+        <!-- 觀行心得：信箋卡片化設計 -->
         <div class="form-group">
           <label for="content">觀行心得</label>
-          <textarea id="content" required placeholder="請依本月主題與觀行指南針，寫下您的日常觀照心得......"></textarea>
+          <div class="paper-card-container">
+            <div class="paper-card-header">
+              <span class="paper-card-tag">🔖 觀行心箋</span>
+              <span class="paper-card-hint">隨寫隨展・文字不設限</span>
+            </div>
+            <textarea 
+              id="content" 
+              required 
+              placeholder="請依本月主題與觀行指南針，寫下您的日常觀照心得......"
+              oninput="autoResize(this)"
+            ></textarea>
+          </div>
         </div>
+
         <button type="submit" class="action-btn" id="submitBtn">送出觀照心得</button>
       </form>
 
@@ -422,7 +476,7 @@
       <div class="status-hint">正在載入本月心得...</div>
     </div>
 
-    <!-- 底部返回鍵：方便大家看完所有心得後直接返回 -->
+    <!-- 底部返回鍵 -->
     <button class="wall-back-btn bottom" onclick="switchView('write')">✍️ 返回填寫心得留言</button>
   </div>
 </div>
@@ -431,15 +485,19 @@
 <div class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">↑</div>
 
 <script>
-  // 您的 Apps Script 專屬 API 網址
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
-  // 兩張圖片網址
-  const IMG_WRITE = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy"; // 寫字小星星人
-  const IMG_WALL = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ";  // 心光薈萃專屬圖
+  const IMG_WRITE = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy"; 
+  const IMG_WALL = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ";  
 
   let currentTopicName = "";
   let allMessages = [];
+
+  // 觀行心箋輸入框：字數增多時自動往下伸展高度
+  function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+  }
 
   // 切換視圖 (更新標題與插圖)
   function switchView(viewName) {
@@ -486,7 +544,7 @@
         descEl.style.display = "none";
       }
 
-      // 2. 呈現觀行指南針 (自動切割換行並加上星星)
+      // 2. 呈現觀行指南針
       const guideBox = document.getElementById("guideBox");
       const guideContainer = document.getElementById("displayGuide");
       const rawGuide = (data.guide ? String(data.guide) : "").trim();
@@ -512,10 +570,9 @@
     }
   }
 
-  // 渲染心得牆 (只挑出當月主題心得，強化手機排版換行)
+  // 渲染心得牆
   function renderMonthlyWall() {
     const container = document.getElementById("wallMessagesList");
-    
     const monthlyList = allMessages.filter(m => (m.topic || "").trim() === currentTopicName);
 
     if (monthlyList.length === 0) {
@@ -541,12 +598,10 @@
     });
   }
 
-  // 平滑回頂部功能
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 監聽滾動以顯示/隱藏回頂部按鈕
   window.addEventListener("scroll", () => {
     const btn = document.getElementById("scrollTopBtn");
     if (window.scrollY > 300) {
@@ -564,10 +619,11 @@
     submitBtn.disabled = true;
     submitBtn.innerText = "傳送中...";
 
+    const contentInput = document.getElementById("content");
     const payload = {
       name: document.getElementById("name").value.trim(),
       dharmaName: document.getElementById("dharmaName").value.trim(),
-      content: document.getElementById("content").value.trim()
+      content: contentInput.value.trim()
     };
 
     try {
@@ -579,9 +635,9 @@
       });
 
       alert("感恩分享！觀行心得已成功送出。");
-      document.getElementById("content").value = "";
+      contentInput.value = "";
+      contentInput.style.height = '340px'; // 重設回初始高度
       
-      // 送出成功後自動重新載入並切換至心得牆
       await loadData();
       switchView('wall');
     } catch (err) {
