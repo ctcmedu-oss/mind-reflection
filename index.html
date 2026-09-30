@@ -43,32 +43,30 @@
     /* 頂部標題 */
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
     h1 {
       font-size: 46px;
-      margin: 0 0 16px 0;
+      margin: 0 0 10px 0;
       color: var(--primary-color);
       letter-spacing: 3px;
     }
 
-    /* 橫幅圖片樣式 */
+    /* 角色插圖樣式 (縮小、透明無底色、置中) */
     .banner-wrapper {
       width: 100%;
-      margin: 0 auto 24px auto;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(140, 94, 60, 0.12);
-      background-color: #eee4dc;
+      margin: 0 auto 20px auto;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: transparent;
     }
     .banner-img {
       width: 100%;
+      max-width: 280px;      /* 限制圖片寬度，小巧雅致 */
       height: auto;
       display: block;
-      object-fit: cover;
+      background: transparent;
     }
 
     /* 分頁切換列 */
@@ -118,29 +116,38 @@
       font-size: 40px;
       font-weight: 800;
       color: var(--primary-color);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.4;
     }
+
+    /* 直接呈現主題說明文字，無多餘標題字樣 */
     .intro-desc {
       font-size: 32px;
       color: var(--text-main);
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       white-space: pre-wrap;
+      line-height: 1.7;
     }
+
+    /* 觀行指南針提示區 */
     .intro-guide {
       background: var(--guide-bg);
       border: 2px dashed var(--accent-color);
       border-radius: 12px;
-      padding: 18px 20px;
+      padding: 20px;
       font-size: 32px;
       color: #4a3b32;
       white-space: pre-wrap;
+      line-height: 1.7;
     }
     .guide-title {
       font-weight: 800;
       color: var(--primary-color);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-size: 34px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     /* 表單區塊 */
@@ -273,12 +280,12 @@
     <h1>文心觀照</h1>
   </header>
 
-  <!-- 橫幅插圖 -->
+  <!-- 角色插圖 (縮小且無底色) -->
   <div class="banner-wrapper">
     <img 
       class="banner-img" 
       src="https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ" 
-      alt="文心觀照 主題意象"
+      alt="文心觀照 插圖"
       loading="lazy"
     >
   </div>
@@ -293,7 +300,11 @@
   <div class="intro-card">
     <div class="topic-badge">本月主題</div>
     <div class="intro-topic-title" id="displayTopic">載入主題中...</div>
+    
+    <!-- 主題說明：直接顯示內容 -->
     <div class="intro-desc" id="displayDesc"></div>
+
+    <!-- 觀行指南針：附指南針圖示與標題 -->
     <div class="intro-guide" id="guideBox" style="display: none;">
       <div class="guide-title">🧭 觀行指南針</div>
       <div id="displayGuide"></div>
@@ -369,7 +380,7 @@
     try {
       const response = await fetch(GAS_URL);
       if (!response.ok) {
-        throw new Error(`HTTP 錯誤狀態碼: ${response.status}`);
+        throw new Error(`HTTP 錯誤: ${response.status}`);
       }
       const data = await response.json();
 
@@ -377,14 +388,23 @@
       document.getElementById("displayTopic").innerText = currentTopicName;
       document.getElementById("topic").value = currentTopicName;
 
-      if (data.description) {
-        document.getElementById("displayDesc").innerText = data.description;
-      }
-      if (data.guide) {
-        document.getElementById("guideBox").style.display = "block";
-        document.getElementById("displayGuide").innerText = data.guide;
+      // 1. 呈現主題說明
+      const descEl = document.getElementById("displayDesc");
+      if (data.description && String(data.description).trim()) {
+        descEl.style.display = "block";
+        descEl.innerText = String(data.description).trim();
       } else {
-        document.getElementById("guideBox").style.display = "none";
+        descEl.style.display = "none";
+      }
+
+      // 2. 呈現觀行指南針
+      const guideBox = document.getElementById("guideBox");
+      const guideEl = document.getElementById("displayGuide");
+      if (data.guide && String(data.guide).trim()) {
+        guideBox.style.display = "block";
+        guideEl.innerText = String(data.guide).trim();
+      } else {
+        guideBox.style.display = "none";
       }
 
       allMessages = data.messages || [];
@@ -398,7 +418,6 @@
   function renderMonthlyWall() {
     const container = document.getElementById("wallMessagesList");
     
-    // 過濾出屬於當月主題的心得
     const monthlyList = allMessages.filter(m => (m.topic || "").trim() === currentTopicName);
 
     if (monthlyList.length === 0) {
@@ -449,7 +468,7 @@
       alert("感恩分享！觀行心得已成功送出。");
       document.getElementById("content").value = "";
       
-      // 送出後自動切換至心得牆看最新結果
+      // 送出後自動更新並切換至心得牆看最新結果
       await loadData();
       switchView('wall');
     } catch (err) {
