@@ -55,7 +55,7 @@
       font-family: "PingFang TC", "BiauKai", "Kaiti TC", "Microsoft JhengHei", serif;
     }
 
-    /* 頂部插圖 (透明無底色、無特效) */
+    /* 頂部插圖 (透明無底色、無多餘特效) */
     .banner-wrapper {
       width: 100%;
       margin: 0 auto 20px auto;
@@ -416,7 +416,7 @@
 
   <!-- 【分頁二：心光薈萃 (心得牆展示區)】 -->
   <div id="wallSection" style="display: none;">
-    <!-- 心得清單 (上方無多餘返回鍵) -->
+    <!-- 心得清單 (上方無返回鍵) -->
     <div id="wallMessagesList">
       <div class="status-hint">正在載入本月心得...</div>
     </div>
@@ -432,11 +432,11 @@
 <script>
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyln_3FkO3-aJnJ_n9Ny-RZrZP_OBdbSDVorNQvOOFbj6a7gYIgHpYXXMulWz0Eke4/exec";
 
-  // 正確對應的兩張透明圖檔：
-  // 文心觀照頁面使用：橫幅圖
+  // 正確對應的兩張圖檔：
+  // 文心觀照頁面使用：橫幅圖 (19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ)
   const IMG_WRITE = "https://lh3.googleusercontent.com/d/19G8WubK-SasdYuJ-GMY_gSFUijPkTYiQ"; 
-  // 心光薈萃頁面使用：寫字小星星人圖
-  const IMG_WALL = "https://lh3.googleusercontent.com/d/1og0C_G3CP0USYrX33zs-d89sSAp00Wdy";  
+  // 心光薈萃頁面使用：最新指定插圖 (1RBD_FWEvd2gmg21tU_t6Mu0eo_owT263)
+  const IMG_WALL = "https://lh3.googleusercontent.com/d/1RBD_FWEvd2gmg21tU_t6Mu0eo_owT263";  
 
   let currentTopicName = "";
   let allMessages = [];
