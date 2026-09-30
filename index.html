@@ -191,7 +191,7 @@
       cursor: not-allowed;
     }
     
-    /* 觀行心得輸入框 (原版大框，支援自動長高) */
+    /* 觀行心得輸入框 (大框支援依文字量自動長高) */
     textarea#content {
       min-height: 320px;
       line-height: 1.6;
@@ -293,7 +293,7 @@
       color: #ffffff;
     }
 
-    /* 底部返回鍵樣式 */
+    /* 返回按鍵共通樣式 */
     .wall-back-btn {
       background-color: #e8dcd0;
       color: var(--primary-color);
@@ -307,12 +307,14 @@
       text-align: center;
       box-sizing: border-box;
       display: block;
-      margin-top: 26px;
-      margin-bottom: 34px;
       transition: background-color 0.2s;
     }
     .wall-back-btn:hover {
       background-color: #ded0c2;
+    }
+    .btn-space {
+      margin-top: 16px;
+      margin-bottom: 34px;
     }
 
     /* 心得展示卡片 */
@@ -477,8 +479,8 @@
       <span>📜 歷溯心光（歷年心得回顧）</span>
     </button>
 
-    <!-- 底部返回鍵：已更新為返回填寫文心觀照 -->
-    <button class="wall-back-btn" onclick="switchView('write')">✍️ 返回填寫文心觀照</button>
+    <!-- 底部返回鍵 -->
+    <button class="wall-back-btn" style="margin-top: 26px; margin-bottom: 34px;" onclick="switchView('write')">✍️ 返回填寫文心觀照</button>
   </div>
 
   <!-- 【分頁三：歷溯心光 (歷年心得回顧區)】 -->
@@ -488,11 +490,14 @@
 
     <!-- 舊心得清單 -->
     <div id="archiveMessagesList">
-      <div class="status-hint">正在載入過往心得...</div>
+      <div class="status-hint">目前尚無過往月份的心得典藏。</div>
     </div>
 
-    <!-- 返回心光薈萃按鈕 -->
-    <button class="wall-back-btn" onclick="switchView('wall')">🌸 返回本月心光薈萃</button>
+    <!-- 返回按鈕組：包含返回心光薈萃與返回填寫文心觀照 -->
+    <div style="margin-top: 28px;">
+      <button class="wall-back-btn" onclick="switchView('wall')">🌸 返回本月心光薈萃</button>
+      <button class="wall-back-btn btn-space" onclick="switchView('write')">✍️ 返回填寫文心觀照</button>
+    </div>
   </div>
 </div>
 
